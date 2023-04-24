@@ -38,8 +38,8 @@ const CategoryNewsCard = ({ news }) => {
                 <div className='d-flex align-items-center gap-2 flex-grow-1'>
                     <Rating
                         placeholderRating={rating?.number}
-                        emptySymbol={<FaRegStar></FaRegStar>}
-                        placeholderSymbol={<FaStar></FaStar>}
+                        emptySymbol={<FaRegStar className='text-warning'></FaRegStar>}
+                        placeholderSymbol={<FaStar className='text-warning'></FaStar>}
                         fullSymbol={<FaStar></FaStar>}
                         readonly
                     ></Rating>
