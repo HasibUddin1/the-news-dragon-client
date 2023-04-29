@@ -11,8 +11,13 @@ const Register = () => {
     const [password, setPassword] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
+    const [accepted, setAccepted] = useState(false)
 
     const { createUser } = useContext(AuthContext)
+
+    const handleAccepted = event => {
+        setAccepted(event.target.checked)
+    }
 
     const handleEmail = event => {
         const emailField = event.target.value
@@ -94,9 +99,12 @@ const Register = () => {
                     <h4 className='text-danger'>{passwordError}</h4>
                 </Form.Text>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Accept terms and conditions" />
+                    <Form.Check 
+                    onClick={handleAccepted}
+                    type="checkbox" 
+                    label={<>Accept <Link to='/terms'>terms and conditions</Link></>} />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" disabled={!accepted} type="submit">
                     Register
                 </Button>
                 <br />
