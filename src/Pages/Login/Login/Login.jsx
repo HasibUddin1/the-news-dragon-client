@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../providers/AuthProviders';
 
 const Login = () => {
+
+    const [error, setError ] = useState('')
+    const [success, setSuccess] = useState('')
+
+    const {signIn} = useContext(AuthContext)
+
+    const handleLogin = event => {
+        event.preventDefault()
+
+        const form = event.target
+        const email = form.email.value
+        const password = form.password.value
+
+        setError('')
+        setSuccess('')
+
+        signIn(email, password)
+        .then(result => {
+            const loggedUser = result.user
+            console.log(loggedUser)
+            setError('')
+            setSuccess('User has successfully logged in')
+        })
+        .catch(error => {
+            console.error(error)
+            setError(error.message)
+        })
+    }
+
     return (
         <Container className='w-25 mx-auto'>
-            <Form>
+            <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" name='email' placeholder="Enter email" />
@@ -28,6 +58,8 @@ const Login = () => {
                 <Form.Text className="text-muted">
                     New to This Site? <Link to='/register'>Please Register</Link>
                 </Form.Text>
+                {error && <h4 className='text-danger'>Error: {error}</h4>}
+                {success && <h4 className='text-success'>{success}</h4>}
             </Form>
         </Container>
     );
