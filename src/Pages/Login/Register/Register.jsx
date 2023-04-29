@@ -7,8 +7,40 @@ const Register = () => {
 
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [emailError, setEmailError] = useState('')
+    const [passwordError, setPasswordError] = useState('')
 
-    const {createUser} = useContext(AuthContext)
+    const { createUser } = useContext(AuthContext)
+
+    const handleEmail = event => {
+        const emailField = event.target.value
+        setEmail(emailField)
+        if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(emailField)) {
+            setEmailError('Please enter a valid Email Address')
+        }
+        else {
+            setEmailError('')
+        }
+    }
+
+    const handlePassword = event => {
+        const passwordField = event.target.value
+        setPassword(passwordField)
+        if (!/(?=.*[a-z])/.test(passwordField)) {
+            setPasswordError('Password must contain at least one lowercase letter')
+        }
+        else if (!/(?=.*[A-Z])/.test(passwordField)) {
+            setPasswordError('Password must contain at least one uppercase letter')
+        }
+        else if (passwordField.length < 8) {
+            setPasswordError('Password must be 8 characters long')
+        }
+        else {
+            setPasswordError('')
+        }
+    }
 
     const handleRegister = event => {
         event.preventDefault();
@@ -18,21 +50,21 @@ const Register = () => {
         const photo = form.photo.value
         const email = form.email.value
         const password = form.password.value
-        
+
         setError('')
         setSuccess('')
 
         createUser(email, password)
-        .then(result => {
-            const registeredUser = result.user
-            console.log(registeredUser)
-            setError('')
-            setSuccess('User has been successfully created')
-        })
-        .catch(error => {
-            console.error(error)
-            setError(error.message)
-        })
+            .then(result => {
+                const registeredUser = result.user
+                console.log(registeredUser)
+                setError('')
+                setSuccess('User has been successfully created')
+            })
+            .catch(error => {
+                console.error(error)
+                setError(error.message)
+            })
     }
 
     return (
@@ -48,13 +80,19 @@ const Register = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" name='email' placeholder="Enter email" />
+                    <Form.Control type="email" value={email} onChange={handleEmail} name='email' placeholder="Enter email" />
                 </Form.Group>
+                <Form.Text className="text-muted">
+                    <h4 className='text-danger'>{emailError}</h4>
+                </Form.Text>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name='password' placeholder="Password" />
+                    <Form.Control type="password" value={password} onChange={handlePassword} name='password' placeholder="Password" />
                 </Form.Group>
+                <Form.Text className="text-muted">
+                    <h4 className='text-danger'>{passwordError}</h4>
+                </Form.Text>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Accept terms and conditions" />
                 </Form.Group>
