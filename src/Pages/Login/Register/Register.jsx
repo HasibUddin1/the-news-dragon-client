@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../providers/AuthProviders';
+import useTitle from '../../../hooks/useTitle';
 
 const Register = () => {
+    useTitle('Register')
 
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
